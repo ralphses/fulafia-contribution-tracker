@@ -9,11 +9,11 @@
             <div class="block-header block-header-default d-flex justify-content-between align-items-center">
                 <h3 class="block-title">Cooperatives</h3>
                 <!-- Trigger Modal -->
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#createCooperativeModal">
+                <a href="{{ route('cooperatives.create') }}" class="btn btn-sm btn-primary">
                     <i class="fa fa-plus me-1"></i> Create New Cooperative
-                </button>
+                </a>
             </div>
+
             <div class="block-content">
                 <div class="table-responsive">
                     <table class="table table-striped table-vcenter">
@@ -41,23 +41,15 @@
                                     </span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('cooperatives.show', ['cooperativeId' => $cooperative->id]) }}"
+                                    <a href="{{ route('contributions.schemes', ['cooperativeId' => $cooperative->id]) }}"
                                        class="btn btn-sm btn-info">
                                         contribution schemes
                                     </a>
-                                    <a href="{{ route('cooperatives.edit', $cooperative->id) }}"
-                                       class="btn btn-sm btn-primary">
-                                        contributions
+
+                                    <a href="{{ route('users', ['cooperativeId' => $cooperative->id]) }}"
+                                       class="btn btn-sm btn-info">
+                                        Members
                                     </a>
-                                    <form action="{{ route('cooperatives.destroy', $cooperative->id) }}" method="POST"
-                                          class="d-inline-block"
-                                          onsubmit="return confirm('Are you sure you want to delete this cooperative?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
                                 </td>
                             </tr>
                         @empty

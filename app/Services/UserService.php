@@ -76,4 +76,9 @@ class UserService
         $user = $this->getUserById($id);
         $user->delete();
     }
+
+    public function findById(int $id)
+    {
+        return User::query()->findOrFail($id);
+    }
 }

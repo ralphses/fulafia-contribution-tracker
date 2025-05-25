@@ -1026,7 +1026,7 @@ hljs.registerLanguage('1c', function(hljs){
 
   // общий паттерн для определения идентификаторов
   var UNDERSCORE_IDENT_RE = '[A-Za-zА-Яа-яёЁ_][A-Za-zА-Яа-яёЁ_0-9]+';
-  
+
   // v7 уникальные ключевые слова, отсутствующие в v8 ==> keyword
   var v7_keywords =
   'далее ';
@@ -1038,7 +1038,7 @@ hljs.registerLanguage('1c', function(hljs){
 
   // keyword : ключевые слова
   var KEYWORD = v7_keywords + v8_keywords;
-  
+
   // v7 уникальные директивы, отсутствующие в v8 ==> meta-keyword
   var v7_meta_keywords =
   'загрузитьизфайла ';
@@ -1055,7 +1055,7 @@ hljs.registerLanguage('1c', function(hljs){
   // v7 системные константы ==> built_in
   var v7_system_constants =
   'разделительстраниц разделительстрок символтабуляции ';
-  
+
   // v7 уникальные методы глобального контекста, отсутствующие в v8 ==> built_in
   var v7_global_context_methods =
   'ansitooem oemtoansi ввестивидсубконто ввестиперечисление ввестипериод ввестиплансчетов выбранныйплансчетов ' +
@@ -1069,7 +1069,7 @@ hljs.registerLanguage('1c', function(hljs){
   'префиксавтонумерации пропись пустоезначение разм разобратьпозициюдокумента рассчитатьрегистрына ' +
   'рассчитатьрегистрыпо симв создатьобъект статусвозврата стрколичествострок сформироватьпозициюдокумента ' +
   'счетпокоду текущеевремя типзначения типзначениястр установитьтана установитьтапо фиксшаблон шаблон ';
-  
+
   // v8 методы глобального контекста ==> built_in
   var v8_global_context_methods =
   'acos asin atan base64значение base64строка cos exp log log10 pow sin sqrt tan xmlзначение xmlстрока ' +
@@ -1164,7 +1164,7 @@ hljs.registerLanguage('1c', function(hljs){
   v7_system_constants +
   v7_global_context_methods + v8_global_context_methods +
   v8_global_context_property;
-  
+
   // v8 системные наборы значений ==> class
   var v8_system_sets_of_values =
   'webцвета windowsцвета windowsшрифты библиотекакартинок рамкистиля символы цветастиля шрифтыстиля ';
@@ -1316,7 +1316,7 @@ hljs.registerLanguage('1c', function(hljs){
   'кодировкаименфайловвzipфайле методсжатияzip методшифрованияzip режимвосстановленияпутейфайловzip режимобработкиподкаталоговzip ' +
   'режимсохраненияпутейzip уровеньсжатияzip ';
 
-  // v8 системные перечисления - 
+  // v8 системные перечисления -
   // Блокировка данных, Фоновые задания, Автоматизированное тестирование,
   // Доставляемые уведомления, Встроенные покупки, Интернет, Работа с двоичными данными ==> class
   var v8_system_enums_other =
@@ -1435,7 +1435,7 @@ hljs.registerLanguage('1c', function(hljs){
 
   // literal : примитивные типы
   var LITERAL = 'null истина ложь неопределено';
-  
+
   // number : числа
   var NUMBERS = hljs.inherit(hljs.NUMBER_MODE);
 
@@ -1456,10 +1456,10 @@ hljs.registerLanguage('1c', function(hljs){
       }
     ]
   };
-  
+
   // comment : комментарии
   var COMMENTS = hljs.inherit(hljs.C_LINE_COMMENT_MODE);
-  
+
   // meta : инструкции препроцессора, директивы компиляции
   var META = {
     className: 'meta',
@@ -1470,13 +1470,13 @@ hljs.registerLanguage('1c', function(hljs){
       COMMENTS
     ]
   };
-  
+
   // symbol : метка goto
   var SYMBOL = {
     className: 'symbol',
     begin: '~', end: ';|:', excludeEnd: true
-  };  
-  
+  };
+
   // function : объявление процедур и функций
   var FUNCTION = {
     className: 'function',
@@ -1528,7 +1528,7 @@ hljs.registerLanguage('1c', function(hljs){
       NUMBERS,
       STRINGS,
       DATE
-    ]  
+    ]
   }
 });
 
@@ -3153,7 +3153,7 @@ hljs.registerLanguage('autohotkey', function(hljs) {
         ]
       },
       {
-        className: 'meta', 
+        className: 'meta',
         begin: '^\\s*#\\w+', end:'$',
         relevance: 0
       },
@@ -17855,7 +17855,7 @@ hljs.registerLanguage('puppet', function(hljs) {
       'creates cwd ogoutput refresh refreshonly tries try_sleep umask backup checksum content ctime force ignore ' +
       'links mtime purge recurse recurselimit replace selinux_ignore_defaults selrange selrole seltype seluser source ' +
       'souirce_permissions sourceselect validate_cmd validate_replacement allowdupe attribute_membership auth_membership forcelocal gid '+
-      'ia_load_module members system host_aliases ip allowed_trunk_vlans description device_url duplex encapsulation etherchannel ' +
+      'ia_load_module users system host_aliases ip allowed_trunk_vlans description device_url duplex encapsulation etherchannel ' +
       'native_vlan speed principals allow_root auth_class auth_type authenticate_user k_of_n mechanisms rule session_owner shared options ' +
       'device fstype enable hasrestart directory present absent link atboot blockdevice device dump pass remounts poller_tag use ' +
       'message withpath adminfile allow_virtual allowcdrom category configfiles flavor install_options instance package_settings platform ' +
@@ -20158,7 +20158,7 @@ hljs.registerLanguage('sqf', function(hljs) {
         'magazinesDetailUniform magazinesDetailVest magazinesTurret magazineTurretAmmo mapAnimAdd ' +
         'mapAnimClear mapAnimCommit mapAnimDone mapCenterOnCamera mapGridPosition markAsFinishedOnSteam ' +
         'markerAlpha markerBrush markerColor markerDir markerPos markerShape markerSize markerText ' +
-        'markerType max members menuAction menuAdd menuChecked menuClear menuCollapse menuData menuDelete ' +
+        'markerType max users menuAction menuAdd menuChecked menuClear menuCollapse menuData menuDelete ' +
         'menuEnable menuEnabled menuExpand menuHover menuPicture menuSetAction menuSetCheck menuSetData ' +
         'menuSetPicture menuSetValue menuShortcut menuShortcutText menuSize menuSort menuText menuURL ' +
         'menuValue min mineActive mineDetectedBy missionConfigFile missionDifficulty missionName ' +

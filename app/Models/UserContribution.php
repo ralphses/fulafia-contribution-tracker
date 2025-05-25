@@ -12,7 +12,7 @@ class UserContribution extends Model
 
     protected $fillable = [
         'user_id',
-        'title',
+        'name',
         'contribution_scheme_id',
         'total_amount',
         'withdrawal_status',

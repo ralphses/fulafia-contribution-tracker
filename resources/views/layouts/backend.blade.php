@@ -141,7 +141,7 @@
 
                         <!-- Contribution Schemes -->
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('contribution-schemes') ? ' active' : '' }}" href="/contribution-schemes">
+                            <a class="nav-main-link{{ request()->is('contribution-schemes') ? ' active' : '' }}" href="{{ route('contributions.schemes') }}">
                                 <i class="nav-main-link-icon fa fa-chart-line"></i>
                                 <span class="nav-main-link-name">Contribution Schemes</span>
                             </a>
@@ -149,7 +149,7 @@
 
                         <!-- Cooperatives -->
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cooperatives') ? ' active' : '' }}" href="/cooperatives">
+                            <a class="nav-main-link{{ request()->is('cooperatives') ? ' active' : '' }}" href="{{ route('cooperatives') }}">
                                 <i class="nav-main-link-icon fa fa-handshake"></i>
                                 <span class="nav-main-link-name">Cooperatives</span>
                             </a>
@@ -157,7 +157,7 @@
 
                         <!-- My Contributions -->
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('my-contributions') ? ' active' : '' }}" href="/my-contributions">
+                            <a class="nav-main-link{{ request()->is('my-contributions') ? ' active' : '' }}" href="{{ route('userContributions.user') }}">
                                 <i class="nav-main-link-icon fa fa-wallet"></i>
                                 <span class="nav-main-link-name">My Contributions</span>
                             </a>
@@ -165,7 +165,7 @@
 
                         <!-- Members Contributions -->
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('members-contributions') ? ' active' : '' }}" href="/members-contributions">
+                            <a class="nav-main-link{{ request()->is('users-contributions') ? ' active' : '' }}" href="{{ route('userContributions.users') }}">
                                 <i class="nav-main-link-icon fa fa-piggy-bank"></i>
                                 <span class="nav-main-link-name">Members Contributions</span>
                             </a>
@@ -173,32 +173,9 @@
 
                         <!-- Staff -->
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('staff') ? ' active' : '' }}" href="/staff">
+                            <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="{{ route('users') }}">
                                 <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Staff</span>
-                            </a>
-                        </li>
-
-                        <!-- Students -->
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('students') ? ' active' : '' }}" href="/students">
-                                <i class="nav-main-link-icon fa fa-user-graduate"></i>
-                                <span class="nav-main-link-name">Students</span>
-                            </a>
-                        </li>
-                        <!-- Admins -->
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('admins') ? ' active' : '' }}" href="/admins">
-                                <i class="nav-main-link-icon fa fa-user-shield"></i>
-                                <span class="nav-main-link-name">Admins</span>
-                            </a>
-                        </li>
-
-                        <!-- Settings -->
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('settings') ? ' active' : '' }}" href="/settings">
-                                <i class="nav-main-link-icon fa fa-cogs"></i>
-                                <span class="nav-main-link-name">Settings</span>
+                                <span class="nav-main-link-name">Members Management</span>
                             </a>
                         </li>
                     </ul>

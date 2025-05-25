@@ -21,37 +21,24 @@ class CorperativeController extends Controller
 
     public function index(Request $request)
     {
-        $corperatives = $this->corperativeService->getAllCorperatives($request->get('per_page', 10));
-        return view('corperatives.index', compact('corperatives'));
-    }
-
-    public function createdByUser(Request $request)
-    {
-        $corperatives = $this->corperativeService->getCorperativesCreatedByUser(Auth::user(), $request->get('per_page', 10));
-        return view('corperatives.created', compact('corperatives'));
-    }
-
-    public function memberOf(Request $request)
-    {
-        $corperatives = $this->corperativeService->getCorperativesForMember(Auth::user(), $request->get('per_page', 10));
-        return view('corperatives.member_of', compact('corperatives'));
+        $cooperatives = $this->corperativeService->getCorperativesCreatedByUser($request->user(), $request->get('per_page', 10));
+        return view('dashboard.cooperatives.index', compact('cooperatives'));
     }
 
     public function create()
     {
-        return view('corperatives.create');
+        return view('dashboard.cooperatives.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name'   => 'required|string|max:255',
-            'status' => 'required|string|in:active,inactive'
+            'name'   => 'required|string|max:255'
         ]);
 
-        $this->corperativeService->createCorperative($request->only(['name', 'status']));
+        $this->corperativeService->createCorperative($request->only(['name']));
 
-        return redirect()->route('corperatives.index')->with('success', 'Corperative created successfully.');
+        return redirect()->route('cooperatives')->with('success', 'Corperative created successfully.');
     }
 
     public function show(Corperative $corperative)

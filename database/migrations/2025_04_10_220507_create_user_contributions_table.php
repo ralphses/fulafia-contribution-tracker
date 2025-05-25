@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('contribution_scheme_id')->constrained('contribution_schemes');
             $table->double('total_amount');
-            $table->enum('withdrawal_status', Utils::WITHDRAWAL_STATUSES)->default(Utils::class::WITHDRAWAL_STATUS_REQUESTED);
+            $table->enum('withdrawal_status', Utils::WITHDRAWAL_STATUSES)->default(Utils::class::WITHDRAWAL_STATUS_NONE);
             $table->timestamps();
         });
     }

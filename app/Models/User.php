@@ -86,10 +86,16 @@ class User extends Authenticatable
         );
     }
 
-    public function contributionScheme()
+    public function contributionSchemes()
     {
-        return $this->belongsToMany(ContributionScheme::class);
+        return $this->belongsToMany(
+            ContributionScheme::class,
+            'contribution_scheme_user',     // Pivot table name
+            'user_id',                      // Foreign key on pivot table for this model
+            'contribution_scheme_id'        // Foreign key on pivot table for the related model
+        )->withTimestamps();               // If you're using timestamps on the pivot table
     }
+
 
     public function userContributions()
     {

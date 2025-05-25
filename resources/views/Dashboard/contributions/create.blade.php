@@ -16,43 +16,64 @@
 
                     <div class="mb-4">
                         <label class="form-label" for="cooperative_id">Select Cooperative</label>
-                        <select name="cooperative_id" id="cooperative_id" class="form-control" required>
+                        <select name="cooperative_id" id="cooperative_id" class="form-control @error('cooperative_id') is-invalid @enderror" required>
                             <option value="">-- Select Cooperative --</option>
                             @foreach ($cooperatives as $cooperative)
-                                <option value="{{ $cooperative->id }}">{{ $cooperative->name }}</option>
+                                <option value="{{ $cooperative->id }}" {{ old('cooperative_id') == $cooperative->id ? 'selected' : '' }}>
+                                    {{ $cooperative->name }}
+                                </option>
                             @endforeach
                         </select>
+                        @error('cooperative_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label" for="contribution_scheme_id">Select Contribution Scheme</label>
-                        <select name="contribution_scheme_id" id="contribution_scheme_id" class="form-control" required>
+                        <select name="contribution_scheme_id" id="contribution_scheme_id" class="form-control @error('contribution_scheme_id') is-invalid @enderror" required>
                             <option value="">-- Select Scheme --</option>
-                            <!-- Options will be loaded via JS -->
                         </select>
+                        @error('contribution_scheme_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label" for="user_contribution_id">Select User Contribution</label>
-                        <select name="user_contribution_id" id="user_contribution_id" class="form-control" required>
+                        <select name="user_contribution_id" id="user_contribution_id" class="form-control @error('user_contribution_id') is-invalid @enderror" required>
                             <option value="">-- Select User Contribution --</option>
-                            <!-- Options will be loaded via JS -->
                         </select>
+                        @error('user_contribution_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label" for="amount">Contribution Amount</label>
-                        <input type="number" name="amount" id="amount" class="form-control" required placeholder="Enter amount">
+                        <input type="number" name="amount" id="amount" class="form-control @error('amount') is-invalid @enderror" required
+                               placeholder="Enter amount" value="{{ old('amount') }}">
+                        @error('amount')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label" for="receipt">Upload Payment Receipt</label>
-                        <input type="file" name="receipt" id="receipt" class="form-control" accept="image/*,application/pdf" required>
+                        <input type="file" name="receipt" id="receipt" class="form-control @error('receipt') is-invalid @enderror"
+                               accept="image/*,application/pdf" required>
+                        @error('receipt')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label" for="notes">Notes (Optional)</label>
-                        <textarea name="notes" id="notes" rows="3" class="form-control" placeholder="Any additional info..."></textarea>
+                        <textarea name="notes" id="notes" rows="3" class="form-control @error('notes') is-invalid @enderror"
+                                  placeholder="Any additional info...">{{ old('notes') }}</textarea>
+                        @error('notes')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4 text-end">
@@ -66,48 +87,55 @@
     </div>
 @endsection
 
-@push('scripts')
     <script>
-        document.getElementById('cooperative_id').addEventListener('change', function () {
-            const cooperativeId = this.value;
+        document.addEventListener('DOMContentLoaded', function () {
+            const cooperativeSelect = document.getElementById('cooperative_id');
             const schemeSelect = document.getElementById('contribution_scheme_id');
-            schemeSelect.innerHTML = '<option value="">Loading schemes...</option>';
-
-            fetch(`/api/cooperatives/${cooperativeId}/schemes`)
-                .then(res => res.json())
-                .then(data => {
-                    schemeSelect.innerHTML = '<option value="">-- Select Scheme --</option>';
-                    data.forEach(scheme => {
-                        const option = document.createElement('option');
-                        option.value = scheme.id;
-                        option.text = scheme.name;
-                        schemeSelect.appendChild(option);
-                    });
-                })
-                .catch(() => {
-                    schemeSelect.innerHTML = '<option value="">Failed to load schemes</option>';
-                });
-        });
-
-        document.getElementById('contribution_scheme_id').addEventListener('change', function () {
-            const schemeId = this.value;
             const contributionSelect = document.getElementById('user_contribution_id');
-            contributionSelect.innerHTML = '<option value="">Loading user contributions...</option>';
 
-            fetch(`/api/contribution-schemes/${schemeId}/user-contributions`)
-                .then(res => res.json())
-                .then(data => {
-                    contributionSelect.innerHTML = '<option value="">-- Select User Contribution --</option>';
-                    data.forEach(uc => {
-                        const option = document.createElement('option');
-                        option.value = uc.id;
-                        option.text = uc.description || `Contribution ID #${uc.id}`;
-                        contributionSelect.appendChild(option);
-                    });
-                })
-                .catch(() => {
-                    contributionSelect.innerHTML = '<option value="">Failed to load contributions</option>';
+            if (cooperativeSelect) {
+                cooperativeSelect.addEventListener('change', function () {
+                    const cooperativeId = this.value;
+                    schemeSelect.innerHTML = '<option value="">Loading schemes...</option>';
+
+                    fetch(`/dashboard/cooperatives/${cooperativeId}/schemes`)
+                        .then(res => res.json())
+                        .then(data => {
+                            schemeSelect.innerHTML = '<option value="">-- Select Scheme --</option>';
+                            data.forEach(scheme => {
+                                const option = document.createElement('option');
+                                option.value = scheme.id;
+                                option.text = scheme.name;
+                                schemeSelect.appendChild(option);
+                            });
+                        })
+                        .catch(() => {
+                            schemeSelect.innerHTML = '<option value="">Failed to load schemes</option>';
+                        });
                 });
+            }
+
+            if (schemeSelect) {
+                schemeSelect.addEventListener('change', function () {
+                    const schemeId = this.value;
+                    contributionSelect.innerHTML = '<option value="">Loading user contributions...</option>';
+
+                    fetch(`/dashboard/contribution-schemes/${schemeId}/user-contributions`)
+                        .then(res => res.json())
+                        .then(data => {
+                            contributionSelect.innerHTML = '<option value="">-- Select User Contribution --</option>';
+                            data.forEach(uc => {
+                                const option = document.createElement('option');
+                                option.value = uc.id;
+                                option.text = uc.description || `Contribution ID #${uc.id}`;
+                                contributionSelect.appendChild(option);
+                            });
+                        })
+                        .catch(() => {
+                            contributionSelect.innerHTML = '<option value="">Failed to load contributions</option>';
+                        });
+                });
+            }
         });
     </script>
-@endpush
+

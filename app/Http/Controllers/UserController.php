@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\FilterUsersRequest;
+use App\Models\Corperative;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -21,14 +22,31 @@ class UserController extends Controller
     // Show all users (with optional filters)
     public function index(FilterUsersRequest $request): View
     {
-        $users = $this->userService->getUsersByFilters(
-            $request->input('role'),
-            $request->input('status'),
-            $request->input('per_page', 10)
-        );
+        $cooperativeId = $request->input('cooperativeId');
 
-        return view('users.index', compact('users'));
+        if ($cooperativeId) {
+            // Fetch the cooperative with its members paginated
+            $members = Corperative::findOrFail($cooperativeId)
+                ->members()
+                ->when($request->filled('role'), function ($query) use ($request) {
+                    $query->where('role', $request->input('role'));
+                })
+                ->when($request->filled('status'), function ($query) use ($request) {
+                    $query->where('status', $request->input('status'));
+                })
+                ->paginate($request->input('per_page', 10));
+        } else {
+            // Use the general user service if no cooperative_id is provided
+            $members = $this->userService->getUsersByFilters(
+                $request->input('role'),
+                $request->input('status'),
+                $request->input('per_page', 10)
+            );
+        }
+
+        return view('dashboard.users.index', compact('members'));
     }
+
 
     // Show create user form
     public function create(): View

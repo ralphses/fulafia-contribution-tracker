@@ -4,10 +4,18 @@ namespace App\Services;
 
 use App\Models\ContributionScheme;
 use App\Models\UserContribution;
+use App\Utils\Utils;
 use Illuminate\Support\Facades\Auth;
 
 class ContributionSchemeService
 {
+    protected CorperativeService $corperativeService;
+    protected UserService $userService;
+
+    public function __construct(CorperativeService $corperativeService, UserService $userService) {
+        $this->corperativeService = $corperativeService;
+        $this->userService = $userService;
+    }
     public function listContributionSchemes(int $cooperativeId = 0, int $perPage = 10)
     {
         $query = ContributionScheme::query();
@@ -21,11 +29,17 @@ class ContributionSchemeService
 
     public function createContributionScheme($data)
     {
+        $user = $this->userService->findById(Auth::id());
         return ContributionScheme::create([
             'name' => $data['name'],
             'type' => $data['type'],
-            'created_by' => Auth::id(),
-            'status' => $data['status'],
+            'payment_time' => $data['payment_time'],
+            'penalty_fee' => $data['penalty_fee'],
+            'total_times' => $data['total_times'],
+            'individual_amount' => $data['total_amount'],
+            'created_by' => $user->id,
+            'corperative_id' => $data['corperative_id'],
+            'status' => Utils::STATUS_ACTIVE,
         ]);
     }
 
@@ -55,5 +69,27 @@ class ContributionSchemeService
             ->latest()
             ->get(['id', 'name'])
             ->toArray();
+    }
+
+    public function getAdminCreatedScheme($adminId, $ispaginated = false, $page = 1, $perPage = 10)
+    {
+        $query = ContributionScheme::query()
+            ->with(['corperative', 'userContributions'])
+            ->where('created_by', $adminId)
+            ->latest();
+        if ($ispaginated) {
+            return $query->paginate($perPage, ['*'], 'page', $page);
+        }
+        return $query->get();
+    }
+
+    public function findById(int $scheme)
+    {
+        return ContributionScheme::query()->find($scheme);
+    }
+
+    public function getUserSchemes(int $id)
+    {
+        return $this->userService->getUserById($id)->contributionSchemes()->latest()->get();
     }
 }

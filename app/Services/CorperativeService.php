@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\ContributionScheme;
 use App\Models\Corperative;
 use App\Models\User;
+use App\Utils\Utils;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +20,7 @@ class CorperativeService
     {
         return Corperative::create([
             'name' => $data['name'],
-            'status' => $data['status'],
+            'status' => Utils::STATUS_ACTIVE,
             'user_id' => Auth::id(),
         ]);
     }
@@ -49,7 +50,7 @@ class CorperativeService
 
     public function getCorperativeDetails(Corperative $corperative): Corperative
     {
-        return $corperative->load('members', 'createdBy');
+        return $corperative->load('users', 'createdBy');
     }
 
     /**
@@ -57,7 +58,7 @@ class CorperativeService
      */
     public function getCorperativesForMember(User $user, $perPage = 10)
     {
-        return $user->corperatives()->with('members')->paginate($perPage);
+        return $user->corperatives()->with('users')->paginate($perPage);
     }
 
     /**
@@ -65,7 +66,7 @@ class CorperativeService
      */
     public function getAllCorperatives($perPage = 10)
     {
-        return Corperative::with('members', 'createdBy')->paginate($perPage);
+        return Corperative::with('users', 'createdBy')->paginate($perPage);
     }
 
     /**
@@ -74,7 +75,7 @@ class CorperativeService
     public function getCorperativesCreatedByUser(User $user, $perPage = 10)
     {
         return Corperative::where('user_id', $user->id)
-            ->with('members')
+            ->with('members', 'createdBy')
             ->latest()
             ->paginate($perPage);
     }
@@ -87,5 +88,10 @@ class CorperativeService
             ->get(['id', 'name'])
             ->toArray();
 
+    }
+
+    public function findById(int $corperative_id)
+    {
+        return Corperative::query()->findOrFail($corperative_id);
     }
 }

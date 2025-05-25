@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('contribution_schemes', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // e.g., Monthly Dues, Welfare, Building Fund
-            $table->dateTime('payment_date'); // e.g., Monthly Dues, Welfare, Building Fund
+            $table->unsignedInteger('total_times'); // e.g., Monthly Dues, Welfare, Building Fund
+            $table->string('payment_time'); // e.g., Monthly Dues, Welfare, Building Fund
             $table->double('penalty_fee'); // e.g., Monthly Dues, Welfare, Building Fund
+            $table->double('individual_amount'); // e.g., Monthly Dues, Welfare, Building Fund
             $table->enum('type', Utils::TYPES); // e.g., recurring, one-time
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); // user who created the scheme
             $table->foreignId('corperative_id')->constrained('corperatives')->cascadeOnDelete()->cascadeOnUpdate();

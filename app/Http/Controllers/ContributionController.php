@@ -4,20 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Contribution;
 use App\Models\ContributionScheme;
-use App\Models\Corperative;
-use App\Models\User;
+use App\Models\UserContribution;
+use App\Services\ContributionSchemeService;
 use App\Services\ContributionService;
-use App\Utils\Utils;
+use App\Services\UserContributionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ContributionController extends Controller
 {
     protected ContributionService $service;
+    protected UserContributionService $userContributionService;
+    protected ContributionSchemeService  $schemeService;
 
-    public function __construct(ContributionService $service)
+    public function __construct(ContributionService $service, UserContributionService $userContributionService, ContributionSchemeService $schemeService)
     {
         $this->service = $service;
+        $this->userContributionService = $userContributionService;
+        $this->schemeService = $schemeService;
     }
 
     public function index()
@@ -29,17 +33,43 @@ class ContributionController extends Controller
     public function create()
     {
        $cooperatives = $this->service->getUserCooperatives(Auth::id());
-        return view('dashboard.contributions.create', compact('cooperatives'));
+       $schemes = $this->schemeService->getUserSchemes(Auth::id());
+       $userContributions = $this->userContributionService->getByUser(Auth::id());
+        return view('dashboard.contributions.create', compact('cooperatives', 'schemes', 'userContributions'));
+    }
+
+    /**
+     * Return all contribution schemes for a cooperative
+     */
+    public function getSchemesByCooperative($id)
+    {
+        $schemes = ContributionScheme::where('corperative_id', $id)->get(['id', 'name']);
+        return response()->json($schemes);
+    }
+
+    /**
+     * Return all user contributions for the authenticated user and given scheme
+     */
+    public function getUserContributionsByScheme($id)
+    {
+        $userId = auth()->id();
+
+        $contributions = UserContribution::where('contribution_scheme_id', $id)
+            ->where('user_id', $userId)
+            ->get(['id', 'name as description']); // or use 'name' or 'custom label'
+
+        return response()->json($contributions);
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'cooperative_id' => 'required|exists:corperatives,id',
             'contribution_scheme_id' => 'required|exists:contribution_schemes,id',
-            'amount' => 'required|numeric|min:0',
-            'contributed_at' => 'required|date',
+            'user_contribution_id' => 'required|exists:user_contributions,id',
+            'amount' => 'required|numeric|min:1',
             'receipt' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'note' => 'nullable|string'
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $this->service->createContribution($request);

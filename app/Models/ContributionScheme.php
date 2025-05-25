@@ -16,8 +16,10 @@ class ContributionScheme extends Model
         'name',
         'type',
         'penalty_fee',
-        'payment_date',
+        'payment_time',
         'created_by',
+        'individual_amount',
+        'total_times',
         'corperative_id',
         'status'
     ];
@@ -28,10 +30,16 @@ class ContributionScheme extends Model
     }
 
 
-    public function users(): BelongsToMany
+    public function members()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(
+            User::class,
+            'contribution_scheme_user',     // Pivot table name
+            'contribution_scheme_id',       // Foreign key on pivot table for this model
+            'user_id'                       // Foreign key on pivot table for the related model
+        )->withTimestamps();               // If timestamps are enabled in the pivot table
     }
+
 
     public function userContributions(): HasMany
     {
