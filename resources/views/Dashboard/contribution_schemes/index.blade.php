@@ -1,3 +1,4 @@
+@php use App\Utils\Utils; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -7,9 +8,11 @@
         <div class="block block-rounded">
             <div class="block-header block-header-default d-flex justify-content-between align-items-center">
                 <h3 class="block-title">Contribution Schemes</h3>
-                <a href="{{ route('contribution-schemes.create') }}" class="btn btn-sm btn-primary">
-                    <i class="fa fa-plus me-1"></i> Create New Scheme
-                </a>
+                @if(!in_array(auth()->user()->role, [Utils::ROLE_STAFF, Utils::ROLE_STUDENT]))
+                    <a href="{{ route('contribution-schemes.create') }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-plus me-1"></i> Create New Scheme
+                    </a>
+                @endif
             </div>
             <div class="block-content">
                 <div class="table-responsive">
@@ -41,9 +44,14 @@
                                 </td>
                                 <td>{{ $scheme->corperative->name ?? 'N/A' }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('userContributions.users', ['scheme_id' => $scheme->id]) }}" class="btn btn-sm btn-info">View Contributors</a>
+                                    @if(!in_array(auth()->user()->role, [Utils::ROLE_STAFF, Utils::ROLE_STUDENT]))
 
-                                    <form action="{{ route('userContributions.create') }}" method="POST" style="display:inline;">
+                                    <a href="{{ route('userContributions.users', ['scheme_id' => $scheme->id]) }}"
+                                       class="btn btn-sm btn-info">View Contributors</a>
+                                    @endif
+
+                                    <form action="{{ route('userContributions.create') }}" method="POST"
+                                          style="display:inline;">
                                         @csrf
                                         <input name="scheme" value="{{ $scheme->id }}" hidden>
                                         <button type="submit" class="btn btn-sm btn-info">Join</button>
@@ -65,7 +73,8 @@
                     <div class="d-flex justify-content-center mt-4 mb-3">
                         <ul class="pagination mb-0">
                             <li class="page-item {{ $contributionSchemes->currentPage() == 1 ? 'disabled' : '' }}">
-                                <a class="page-link" href="{{ $contributionSchemes->previousPageUrl() }}" aria-label="Previous">Prev</a>
+                                <a class="page-link" href="{{ $contributionSchemes->previousPageUrl() }}"
+                                   aria-label="Previous">Prev</a>
                             </li>
 
                             @php
@@ -74,7 +83,8 @@
                             @endphp
 
                             @if($start > 1)
-                                <li class="page-item"><a class="page-link" href="{{ $contributionSchemes->url(1) }}">1</a></li>
+                                <li class="page-item"><a class="page-link"
+                                                         href="{{ $contributionSchemes->url(1) }}">1</a></li>
                                 @if($start > 2)
                                     <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
                                 @endif
@@ -90,7 +100,9 @@
                                 @if($end < $contributionSchemes->lastPage() - 1)
                                     <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
                                 @endif
-                                <li class="page-item"><a class="page-link" href="{{ $contributionSchemes->url($contributionSchemes->lastPage()) }}">{{ $contributionSchemes->lastPage() }}</a></li>
+                                <li class="page-item"><a class="page-link"
+                                                         href="{{ $contributionSchemes->url($contributionSchemes->lastPage()) }}">{{ $contributionSchemes->lastPage() }}</a>
+                                </li>
                             @endif
 
                             <li class="page-item {{ $contributionSchemes->currentPage() == $contributionSchemes->lastPage() ? 'disabled' : '' }}">

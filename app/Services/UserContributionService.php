@@ -26,7 +26,7 @@ class UserContributionService
         if ($selectedScheme) {
             $query->where('contribution_scheme_id', $selectedScheme);
         }
-        return $query->with(['user', 'contributionScheme'])->paginate($perPage ?? 10);
+        return $query->with(['user', 'contributionScheme'])->paginate($perPage);
     }
 
     public function getByUser(int $userId, $selectedScheme = false, int $perPage = 10)

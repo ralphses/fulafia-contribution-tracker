@@ -9,9 +9,12 @@
             <div class="block-header block-header-default d-flex justify-content-between align-items-center">
                 <h3 class="block-title">Cooperatives</h3>
                 <!-- Trigger Modal -->
-                <a href="{{ route('cooperatives.create') }}" class="btn btn-sm btn-primary">
-                    <i class="fa fa-plus me-1"></i> Create New Cooperative
-                </a>
+                @if(!in_array(auth()->user()->role, [Utils::ROLE_STAFF, Utils::ROLE_STUDENT]))
+
+                    <a href="{{ route('cooperatives.create') }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-plus me-1"></i> Create New Cooperative
+                    </a>
+                @endif
             </div>
 
             <div class="block-content">

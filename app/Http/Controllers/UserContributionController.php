@@ -35,9 +35,10 @@ class UserContributionController extends Controller
     public function getUserContributions(Request $request)
     {
         $selectedScheme = $request->get('scheme_id');
-        $members = false;
+        $members = $request->has('user');
+        $id = $request->input('user', $request->user()->id);
         $contributionSchemes = $this->contributionSchemeService->getAdminCreatedScheme($request->user()->id);
-        $userContributions = $this->userContributionService->getByUser($request->user()->id, $selectedScheme);
+        $userContributions = $this->userContributionService->getByUser($id, $selectedScheme);
         return view('dashboard.user_contributions.index', compact('userContributions', 'members', 'contributionSchemes', 'selectedScheme'));
     }
 

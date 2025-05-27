@@ -86,44 +86,7 @@
         </div>
 
         <!-- Full Table -->
-        <div class="block block-rounded">
-            <div class="block-header block-header-default">
-                <h3 class="block-title">Recent Payments</h3>
-            </div>
-            <div class="block-content">
-                <div class="table-responsive">
-                    <table class="table table-striped table-vcenter">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th style="width: 30%;">Email</th>
-                            <th style="width: 15%;">Access</th>
-                            <th class="text-center" style="width: 100px;">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="fw-semibold">Albert Ray</td>
-                            <td>customer1@example.com</td>
-                            <td>
-                                <span class="badge bg-danger">Disabled</span>
-                            </td>
-                            <td class="text-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Edit">
-                                        <i class="fa fa-pencil-alt"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Delete">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+
         <!-- END Full Table -->
     </div>
     <!-- END Page Content -->

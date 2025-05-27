@@ -1,4 +1,6 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
+@php use Illuminate\Support\Facades\Auth;
+ use App\Utils\Utils;
+ @endphp
     <!doctype html>
 <html lang="{{ config('app.locale') }}">
 
@@ -163,6 +165,8 @@
                             </a>
                         </li>
 
+                        @if(!in_array(auth()->user()->role, [Utils::ROLE_STAFF, Utils::ROLE_STUDENT]))
+
                         <!-- Members Contributions -->
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->is('users-contributions') ? ' active' : '' }}" href="{{ route('userContributions.users') }}">
@@ -178,6 +182,7 @@
                                 <span class="nav-main-link-name">Members Management</span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </div>
                 <!-- END Side Navigation -->

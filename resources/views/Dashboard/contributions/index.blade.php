@@ -1,3 +1,4 @@
+@php use Carbon\Carbon; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -30,22 +31,39 @@
                             <tr>
                                 <td class="fw-semibold">{{ $contributions->firstItem() + $index }}</td>
                                 <td>{{ number_format($contribution->amount, 2) }}</td>
-                                <td>{{ \Carbon\Carbon::parse($contribution->payment_date)->format('d/m/Y') }}</td>
+                                <td>{{ Carbon::parse($contribution->payment_date)->format('d/m/Y') }}</td>
                                 <td>
                                     @if($contribution->receipt_path)
-                                        <a href="{{ asset('storage/' . $contribution->receipt_path) }}" target="_blank">View Receipt</a>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-sm btn-link p-0" data-bs-toggle="modal" data-bs-target="#receiptModal{{ $contribution->id }}">
+                                            View Receipt
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="receiptModal{{ $contribution->id }}" tabindex="-1" aria-labelledby="receiptModalLabel{{ $contribution->id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="receiptModalLabel{{ $contribution->id }}">Payment Receipt</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                        <img src="{{ asset('storage/' . $contribution->receipt_path) }}" class="img-fluid" alt="Receipt Image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @else
                                         N/A
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="badge {{ $contribution->status == 'approved' ? 'bg-success' : 'bg-warning' }}">
-                                        {{ ucfirst($contribution->status) }}
-                                    </span>
+                                <span class="badge {{ $contribution->status == 'approved' ? 'bg-success' : 'bg-warning' }}">
+                                    {{ ucfirst($contribution->status) }}
+                                </span>
                                 </td>
                                 <td>{{ $contribution->contributionScheme->name ?? 'N/A' }}</td>
                                 <td class="text-center">
-                                    {{-- Add action buttons here if needed --}}
                                     <button class="btn btn-sm btn-secondary">Accept</button>
                                 </td>
                             </tr>

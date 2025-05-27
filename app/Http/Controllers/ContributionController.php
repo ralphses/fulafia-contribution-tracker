@@ -8,6 +8,7 @@ use App\Models\UserContribution;
 use App\Services\ContributionSchemeService;
 use App\Services\ContributionService;
 use App\Services\UserContributionService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,7 +51,7 @@ class ContributionController extends Controller
     /**
      * Return all user contributions for the authenticated user and given scheme
      */
-    public function getUserContributionsByScheme($id)
+    public function getUserContributionsByScheme($id): JsonResponse
     {
         $userId = auth()->id();
 

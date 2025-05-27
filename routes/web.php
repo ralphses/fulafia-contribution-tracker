@@ -10,13 +10,15 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Example Routes
-Route::view('/', 'landing');
-Route::match(['get', 'post'], '/dashboard', function(){
-    return view('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::view('/', 'landing');
+    Route::match(['get', 'post'], '/dashboard', function(){
+        return view('dashboard');
+    });
+    Route::view('/pages/slick', 'pages.slick');
+    Route::view('/pages/datatables', 'pages.datatables');
+    Route::view('/pages/blank', 'pages.blank');
 });
-Route::view('/pages/slick', 'pages.slick');
-Route::view('/pages/datatables', 'pages.datatables');
-Route::view('/pages/blank', 'pages.blank');
 
 
 Route::prefix("dashboard")->middleware(['auth'])->group(function(){
@@ -34,7 +36,6 @@ Route::prefix("dashboard")->middleware(['auth'])->group(function(){
 
     Route::prefix("recent-contributions")->group(function() {
         Route::get("", [ContributionController::class, "index"])->name("contributions.recent");
-//        Route::get("/{id}", [ContributionController::class, "show"])->name("contributions.recent.show");
         Route::get("/add", [ContributionController::class, "create"])->name("contributions.recent.create");
         Route::post("/add", [ContributionController::class, "store"])->name("contributions.recent.store");
     });

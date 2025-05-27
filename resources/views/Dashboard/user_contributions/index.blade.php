@@ -1,3 +1,4 @@
+@php use App\Utils\Utils; @endphp
 @extends('layouts.backend')
 
 @section('content')
@@ -11,9 +12,12 @@
                         My Contributions
                     @endif
                 </h3>
-                <form method="GET" action="{{ request()->is('') ? route('userContributions.user') : route('userContributions.users') }}" class="d-flex align-items-center">
+                <form method="GET"
+                      action="{{ request()->is('') ? route('userContributions.user') : route('userContributions.users') }}"
+                      class="d-flex align-items-center">
                     <label for="scheme_id" class="me-2 mb-0 fw-semibold">Filter by Scheme:</label>
-                    <select name="scheme_id" id="scheme_id" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                    <select name="scheme_id" id="scheme_id" class="form-select form-select-sm me-2"
+                            onchange="this.form.submit()">
                         <option value="">All Schemes</option>
                         @foreach($contributionSchemes as $scheme)
                             <option value="{{ $scheme->id }}" {{ $selectedScheme == $scheme->id ? 'selected' : '' }}>
@@ -33,12 +37,15 @@
                         <div class="block-header bg-body-light">
                             <h4 class="mb-0">
                                 {{ $userContribution->title }}
-                                <span class="text-muted">({{ $userContribution->contributionScheme->name ?? 'N/A' }})</span>
+                                <span
+                                    class="text-muted">({{ $userContribution->contributionScheme->name ?? 'N/A' }})</span>
                             </h4>
                         </div>
                         <div class="block-content">
-                            <p><strong>Total Amount:</strong> ₦{{ number_format($userContribution->total_amount, 2) }}</p>
-                            <p><strong>Withdrawal Status:</strong> {{ ucfirst($userContribution->withdrawal_status) }}</p>
+                            <p><strong>Total Amount:</strong> ₦{{ number_format($userContribution->total_amount, 2) }}
+                            </p>
+                            <p><strong>Withdrawal Status:</strong> {{ ucfirst($userContribution->withdrawal_status) }}
+                            </p>
 
                             @if($userContribution->contributions->count())
                                 <div class="table-responsive">
@@ -56,12 +63,12 @@
                                         <tbody>
                                         @foreach($userContribution->contributions as $contribution)
                                             <tr>
-                                                <td>{{ $contribution->contributed_at->format('d M, Y') }}</td>
+                                                <td>{{ $contribution->contributed_at }}</td>
                                                 <td>{{ number_format($contribution->amount, 2) }}</td>
                                                 <td>
                                                     <span class="badge
-                                                        @if($contribution->status === 'approved') bg-success
-                                                        @elseif($contribution->status === 'pending') bg-warning
+                                                        @if($contribution->status === Utils::STATUS_ACTIVE) bg-success
+                                                        @elseif($contribution->status === Utils::STATUS_REJECTED) bg-warning
                                                         @else bg-danger @endif">
                                                         {{ ucfirst($contribution->status) }}
                                                     </span>
@@ -69,11 +76,39 @@
                                                 <td>{{ $contribution->note ?? 'N/A' }}</td>
                                                 <td>
                                                     @if($contribution->receipt_url)
-                                                        <a href="{{ $contribution->receipt_url }}" target="_blank">View</a>
+                                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#receiptModal{{ $contribution->id }}">
+                                                            View
+                                                        </button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="receiptModal{{ $contribution->id }}"
+                                                             tabindex="-1"
+                                                             aria-labelledby="receiptModalLabel{{ $contribution->id }}"
+                                                             aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="receiptModalLabel{{ $contribution->id }}">
+                                                                            Receipt Preview</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body text-center">
+                                                                        <img src="{{ $contribution->receipt_url }}"
+                                                                             alt="Receipt Image" class="img-fluid">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     @else
                                                         <span class="text-muted">No Receipt</span>
                                                     @endif
                                                 </td>
+
                                                 <td>{{ $contribution->admin_note ?? 'N/A' }}</td>
                                             </tr>
                                         @endforeach
