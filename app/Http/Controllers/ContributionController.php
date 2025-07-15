@@ -28,6 +28,7 @@ class ContributionController extends Controller
     public function index()
     {
         $contributions = $this->service->listContributions();
+        // dd($contributions);
         return view('dashboard.contributions.index', compact('contributions'));
     }
 
@@ -75,7 +76,7 @@ class ContributionController extends Controller
 
         $this->service->createContribution($request);
 
-        return redirect()->route('contributions.index')->with('success', 'Contribution submitted successfully!');
+        return redirect()->route('contributions.recent')->with('success', 'Contribution submitted successfully!');
     }
 
     public function show(Contribution $contribution)
@@ -84,19 +85,16 @@ class ContributionController extends Controller
         return view('contributions.show', compact('contribution'));
     }
 
-    public function approve(Contribution $contribution)
+    public function approve(Request $request)
     {
+        $contribution = Contribution::find($request->id);
         $this->service->approveContribution($contribution);
         return back()->with('success', 'Contribution approved.');
     }
 
-    public function reject(Request $request, Contribution $contribution)
+    public function reject(Request $request)
     {
-        $request->validate([
-            'admin_note' => 'required|string'
-        ]);
-
-        $this->service->rejectContribution($request, $contribution);
+        $this->service->rejectContribution($request);
         return back()->with('error', 'Contribution rejected.');
     }
 

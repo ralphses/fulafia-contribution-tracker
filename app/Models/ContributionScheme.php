@@ -34,9 +34,9 @@ class ContributionScheme extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'contribution_scheme_user',     // Pivot table name
-            'contribution_scheme_id',       // Foreign key on pivot table for this model
-            'user_id'                       // Foreign key on pivot table for the related model
+            'contribution_scheme_user',     
+            'contribution_scheme_id',       
+            'user_id'                      
         )->withTimestamps();               // If timestamps are enabled in the pivot table
     }
 

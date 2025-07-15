@@ -36,6 +36,8 @@ Route::prefix("dashboard")->middleware(['auth'])->group(function(){
 
     Route::prefix("recent-contributions")->group(function() {
         Route::get("", [ContributionController::class, "index"])->name("contributions.recent");
+        Route::get("accept/{id}", [ContributionController::class, "approve"])->name("contributions.approve");
+        Route::get("reject/{id}", [ContributionController::class, "reject"])->name("contributions.reject");
         Route::get("/add", [ContributionController::class, "create"])->name("contributions.recent.create");
         Route::post("/add", [ContributionController::class, "store"])->name("contributions.recent.store");
     });

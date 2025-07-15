@@ -59,15 +59,16 @@ class ContributionService
     public function approveContribution(Contribution $contribution): bool
     {
         return $contribution->update([
-            'status' => 'approved',
+            'status' => 'active',
             'admin_note' => 'Approved by admin.',
         ]);
     }
 
-    public function rejectContribution(Request $request, Contribution $contribution)
+    public function rejectContribution(Request $request)
     {
+        $contribution = Contribution::find($request->id);
         return $contribution->update([
-            'status' => 'rejected',
+            'status' => Utils::STATUS_REJECTED,
             'admin_note' => $request->admin_note
         ]);
     }

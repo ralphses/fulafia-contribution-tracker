@@ -23,7 +23,9 @@
                             <th>Payment Receipt</th>
                             <th>Status</th>
                             <th>Scheme</th>
+                            @if (Auth::user()->role !== "student")
                             <th class="text-center">Actions</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
@@ -58,14 +60,25 @@
                                     @endif
                                 </td>
                                 <td>
-                                <span class="badge {{ $contribution->status == 'approved' ? 'bg-success' : 'bg-warning' }}">
+                                <span class="badge {{ $contribution->status == 'active' ? 'bg-success' : 'bg-warning' }}">
                                     {{ ucfirst($contribution->status) }}
                                 </span>
                                 </td>
-                                <td>{{ $contribution->contributionScheme->name ?? 'N/A' }}</td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-secondary">Accept</button>
+                                <td>{{ $contribution->userContribution->contributionScheme->name  }}</td>
+                                 @if (Auth::user()->role !== "student")
+                           <td class="text-center">
+                            
+                                    <a href="{{ route('contributions.reject', ['id' => $contribution->id]) }}">
+                                <button class="btn btn-sm btn-danger">Reject</button>
+                            </a>
+
+                             <a href="{{ route('contributions.approve', ['id' => $contribution->id]) }}">
+                                <button class="btn btn-sm btn-success">Accept</button>
+                            </a>
+                                    
                                 </td>
+                            @endif
+                                
                             </tr>
                         @empty
                             <tr>
