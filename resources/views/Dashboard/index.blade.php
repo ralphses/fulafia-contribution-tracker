@@ -102,7 +102,7 @@
                 </a>
             </div>
             <div class="block-content">
-                <div class="table-responsive">
+                <divF class="table-responsive">
                     <table class="table table-striped table-vcenter">
                         <thead>
                         <tr>
@@ -111,7 +111,9 @@
                             <th>Payment Date</th>
                             <th>Payment Receipt</th>
                             <th>Status</th>
+                            @if(!$isRegularUser)
                             <th class="text-center">Actions</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
@@ -158,9 +160,19 @@
                                     {{ ucfirst($contribution->status) }}
                                 </span>
                                 </td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-secondary">Accept</button>
+                                @if (Auth::user()->role !== "student")
+                           <td class="text-center">
+                            
+                                    <a href="{{ route('contributions.reject', ['id' => $contribution->id]) }}">
+                                <button class="btn btn-sm btn-danger">Reject</button>
+                            </a>
+
+                             <a href="{{ route('contributions.approve', ['id' => $contribution->id]) }}">
+                                <button class="btn btn-sm btn-success">Accept</button>
+                            </a>
+                                    
                                 </td>
+                            @endif
                             </tr>
                         @empty
                             <tr>
