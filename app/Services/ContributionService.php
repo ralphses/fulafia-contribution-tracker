@@ -46,7 +46,7 @@ class ContributionService
                     'user_contribution_id' => $request->user_contribution_id,
                     'note' => $request->note,
                     'receipt_path' => $path,
-                    'status' => Utils::STATUS_ACTIVE,
+                    'status' => Utils::STATUS_INACTIVE,
                 ]
             );
     }
