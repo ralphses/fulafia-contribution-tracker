@@ -77,7 +77,9 @@
                                 <!-- Assuming you have an array of roles in your Utils class -->
                                 @foreach (Utils::ROLES as $role)
                                     <option
+                                    @if ($role !== Utils::ROLE_STAFF)
                                         value="{{ $role }}" {{ old('role') == $role ? 'selected' : '' }}>{{ ucfirst($role) }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             <label class="form-label" for="register-role">Role</label>
